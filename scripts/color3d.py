@@ -38,17 +38,9 @@ oklch_colors = np.array([lab2lch(oklab.reshape(1, 1, 3)).reshape(3) for oklab in
 # Plotting in 3D space
 fig = plt.figure(figsize=FIGURE_SIZE)
 
-# RGB Plot
-ax1 = fig.add_subplot(141, projection='3d')
-ax1.scatter(rgb_colors[:, 0], rgb_colors[:, 1], rgb_colors[:, 2], c=rgb_colors, s=POINT_SIZE)
-ax1.set_title('RGB Color Space')
-ax1.set_xlabel('R')
-ax1.set_ylabel('G')
-ax1.set_ylim(1, 0)
-ax1.set_zlabel('B')
 
 # sRGB Plot
-ax2 = fig.add_subplot(142, projection='3d')
+ax2 = fig.add_subplot(131, projection='3d')
 ax2.scatter(srgb_colors[:, 0], srgb_colors[:, 1], srgb_colors[:, 2], c=rgb_colors, s=POINT_SIZE)
 ax2.set_title('sRGB Color Space')
 ax2.set_xlabel('R')
@@ -57,7 +49,7 @@ ax2.set_ylim(1, 0)
 ax2.set_zlabel('B')
 
 # OKLAB Plot
-ax3 = fig.add_subplot(143, projection='3d')
+ax3 = fig.add_subplot(132, projection='3d')
 ax3.scatter(oklab_colors[:, 1], oklab_colors[:, 2], oklab_colors[:, 0], c=rgb_colors, s=POINT_SIZE)
 ax3.set_title('OKLAB Color Space')
 ax3.set_xlabel('a')
@@ -65,7 +57,7 @@ ax3.set_ylabel('b')
 ax3.set_zlabel('L')
 
 # OKLCH Plot
-ax4 = fig.add_subplot(144, projection='3d')
+ax4 = fig.add_subplot(133, projection='3d')
 ax4.scatter(oklch_colors[:, 2], oklch_colors[:, 0], oklch_colors[:, 1], c=rgb_colors, s=POINT_SIZE)
 ax4.set_title('OKLCH Color Space')
 ax4.set_xlabel('H')
