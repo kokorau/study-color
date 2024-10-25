@@ -5,7 +5,7 @@ from skimage.color import rgb2lab, lab2lch
 
 # Constants
 POINT_SIZE = 10
-FIGURE_SIZE = (24, 6)
+FIGURE_SIZE = (30, 10)
 
 # Function to convert sRGB to Linear RGB
 def srgb_to_linear(value):
@@ -41,37 +41,37 @@ def plot_color_spaces(rgb_colors, oklab_colors, oklch_colors, point_size=POINT_S
     fig = plt.figure(figsize=FIGURE_SIZE)
 
     # sRGB Plot
-    ax2 = fig.add_subplot(131, projection='3d')
-    ax2.scatter(rgb_colors[:, 0], rgb_colors[:, 1], rgb_colors[:, 2], c=rgb_colors, s=point_size)
-    ax2.set_title('sRGB Color Space')
-    ax2.set_xlabel('R')
-    ax2.set_xlim(0, 1)
-    ax2.set_ylabel('G')
-    ax2.set_ylim(1, 0)
-    ax2.set_zlabel('B')
-    ax2.set_zlim(0, 1)
+    ax1 = fig.add_subplot(141, projection='3d')
+    ax1.scatter(rgb_colors[:, 0], rgb_colors[:, 1], rgb_colors[:, 2], c=rgb_colors, s=point_size)
+    ax1.set_title('sRGB Color Space')
+    ax1.set_xlabel('R')
+    ax1.set_xlim(0, 1)
+    ax1.set_ylabel('G')
+    ax1.set_ylim(1, 0)
+    ax1.set_zlabel('B')
+    ax1.set_zlim(0, 1)
 
     # OKLAB Plot
-    ax3 = fig.add_subplot(132, projection='3d')
-    ax3.scatter(oklab_colors[:, 1], oklab_colors[:, 2], oklab_colors[:, 0], c=rgb_colors, s=point_size)
-    ax3.set_title('OKLAB Color Space')
-    ax3.set_xlabel('a')
-    ax3.set_ylabel('b')
-    ax3.set_ylim(-100, 100)
-    ax3.set_zlabel('L')
-    ax3.set_zlim(0, 100)
+    ax2 = fig.add_subplot(142, projection='3d')
+    ax2.scatter(oklab_colors[:, 1], oklab_colors[:, 2], oklab_colors[:, 0], c=rgb_colors, s=point_size)
+    ax2.set_title('OKLAB Color Space')
+    ax2.set_xlabel('a')
+    ax2.set_ylabel('b')
+    ax2.set_ylim(-100, 100)
+    ax2.set_zlabel('L')
+    ax2.set_zlim(0, 100)
 
     # OKLCH Plot
-    ax4 = fig.add_subplot(133, projection='3d')
-    ax4.scatter(oklch_colors[:, 2], oklch_colors[:, 0], oklch_colors[:, 1], c=rgb_colors, s=point_size)
-    ax4.set_title('OKLCH Color Space')
-    ax4.set_xlabel('H')
-    ax4.set_ylabel('L')
-    ax4.set_ylim(100, 0)
-    ax4.set_zlabel('C')
-    ax4.set_zlim(0, 120)
+    ax3 = fig.add_subplot(143, projection='3d')
+    ax3.scatter(oklch_colors[:, 2], oklch_colors[:, 0], oklch_colors[:, 1], c=rgb_colors, s=point_size)
+    ax3.set_title('OKLCH Color Space')
+    ax3.set_xlabel('H')
+    ax3.set_ylabel('L')
+    ax3.set_ylim(100, 0)
+    ax3.set_zlabel('C')
+    ax3.set_zlim(0, 120)
 
-    plt.subplots_adjust(left=0.05, right=0.95, top=0.9, bottom=0.1, wspace=0.3)
+    plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.05, wspace=0.3)
     plt.show()
 
 # Jupyter Notebook: Function to generate color palette with equal intervals
