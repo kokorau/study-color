@@ -1,9 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import json
 from skimage.color import rgb2lab, lab2lch
 
 # Constants
-POINT_SIZE = 60
+POINT_SIZE = 10
 FIGURE_SIZE = (24, 6)
 
 # Function to convert sRGB to Linear RGB
@@ -19,51 +20,60 @@ def rgb_to_oklab(rgb):
     linear_rgb = np.array([srgb_to_linear(c) for c in rgb])
     return rgb2lab(linear_rgb.reshape(1, 1, 3)).reshape(3)  # Convert RGB to LAB as an approximation for OKLAB
 
-# Generate RGB colors with equal intervals
-n_intervals = 20
-r_values = np.linspace(0, 1, n_intervals)
-g_values = np.linspace(0, 1, n_intervals)
-b_values = np.linspace(0, 1, n_intervals)
-rgb_colors = np.array([[r, g, b] for r in r_values for g in g_values for b in b_values])
+# Function to convert OKLAB to OKLCH
+def oklab_to_oklch(oklab):
+    return lab2lch(oklab.reshape(1, 1, 3)).reshape(3)
 
-# Convert RGB colors to sRGB
-srgb_colors = np.array([[(c * 255).astype(int) / 255 for c in color] for color in rgb_colors])
+# Function to flatten color palette and convert to different color spaces
+def process_color_palette(palette):
+    # Flatten the color palette
+    flattened_palette = [color for sublist in palette for color in sublist]
+    # Convert hex to RGB
+    rgb_colors = np.array([[int(color[i:i+2], 16) / 255 for i in (1, 3, 5)] for color in flattened_palette])
+    # Convert RGB to Linear RGB and then to OKLAB
+    oklab_colors = np.array([rgb_to_oklab(color) for color in rgb_colors])
+    # Convert OKLAB to OKLCH
+    oklch_colors = np.array([oklab_to_oklch(oklab) for oklab in oklab_colors])
+    return rgb_colors, oklab_colors, oklch_colors
 
-# Convert sRGB to OKLAB
-oklab_colors = np.array([rgb_to_oklab(color) for color in srgb_colors])
+# Plotting function
+def plot_color_spaces(rgb_colors, oklab_colors, oklch_colors, point_size=POINT_SIZE):
+    fig = plt.figure(figsize=FIGURE_SIZE)
 
-# Convert OKLAB to OKLCH
-oklch_colors = np.array([lab2lch(oklab.reshape(1, 1, 3)).reshape(3) for oklab in oklab_colors])
+    # sRGB Plot
+    ax2 = fig.add_subplot(131, projection='3d')
+    ax2.scatter(rgb_colors[:, 0], rgb_colors[:, 1], rgb_colors[:, 2], c=rgb_colors, s=point_size)
+    ax2.set_title('sRGB Color Space')
+    ax2.set_xlabel('R')
+    ax2.set_ylabel('G')
+    ax2.set_ylim(1, 0)
+    ax2.set_zlabel('B')
 
-# Plotting in 3D space
-fig = plt.figure(figsize=FIGURE_SIZE)
+    # OKLAB Plot
+    ax3 = fig.add_subplot(132, projection='3d')
+    ax3.scatter(oklab_colors[:, 1], oklab_colors[:, 2], oklab_colors[:, 0], c=rgb_colors, s=point_size)
+    ax3.set_title('OKLAB Color Space')
+    ax3.set_xlabel('a')
+    ax3.set_ylabel('b')
+    ax3.set_zlabel('L')
 
+    # OKLCH Plot
+    ax4 = fig.add_subplot(133, projection='3d')
+    ax4.scatter(oklch_colors[:, 2], oklch_colors[:, 0], oklch_colors[:, 1], c=rgb_colors, s=point_size)
+    ax4.set_title('OKLCH Color Space')
+    ax4.set_xlabel('H')
+    ax4.set_ylabel('L')
+    ax4.set_ylim(100, 0)
+    ax4.set_zlabel('C')
 
-# sRGB Plot
-ax2 = fig.add_subplot(131, projection='3d')
-ax2.scatter(srgb_colors[:, 0], srgb_colors[:, 1], srgb_colors[:, 2], c=rgb_colors, s=POINT_SIZE)
-ax2.set_title('sRGB Color Space')
-ax2.set_xlabel('R')
-ax2.set_ylabel('G')
-ax2.set_ylim(1, 0)
-ax2.set_zlabel('B')
+    plt.subplots_adjust(left=0.05, right=0.95, top=0.9, bottom=0.1, wspace=0.3)
+    plt.show()
 
-# OKLAB Plot
-ax3 = fig.add_subplot(132, projection='3d')
-ax3.scatter(oklab_colors[:, 1], oklab_colors[:, 2], oklab_colors[:, 0], c=rgb_colors, s=POINT_SIZE)
-ax3.set_title('OKLAB Color Space')
-ax3.set_xlabel('a')
-ax3.set_ylabel('b')
-ax3.set_zlabel('L')
-
-# OKLCH Plot
-ax4 = fig.add_subplot(133, projection='3d')
-ax4.scatter(oklch_colors[:, 2], oklch_colors[:, 0], oklch_colors[:, 1], c=rgb_colors, s=POINT_SIZE)
-ax4.set_title('OKLCH Color Space')
-ax4.set_xlabel('H')
-ax4.set_ylabel('L')
-ax4.set_ylim(100, 0)
-ax4.set_zlabel('C')
-
-plt.subplots_adjust(left=0.05, right=0.95, top=0.9, bottom=0.1, wspace=0.3)
-plt.show()
+# Jupyter Notebook: Function to generate color palette with equal intervals
+def generate_equal_interval_palette():
+    n_intervals = 10
+    r_values = np.linspace(0, 1, n_intervals)
+    g_values = np.linspace(0, 1, n_intervals)
+    b_values = np.linspace(0, 1, n_intervals)
+    rgb_colors = np.array([[r, g, b] for r in r_values for g in g_values for b in b_values])
+    return rgb_colors
