@@ -45,9 +45,11 @@ def plot_color_spaces(rgb_colors, oklab_colors, oklch_colors, point_size=POINT_S
     ax2.scatter(rgb_colors[:, 0], rgb_colors[:, 1], rgb_colors[:, 2], c=rgb_colors, s=point_size)
     ax2.set_title('sRGB Color Space')
     ax2.set_xlabel('R')
+    ax2.set_xlim(0, 1)
     ax2.set_ylabel('G')
     ax2.set_ylim(1, 0)
     ax2.set_zlabel('B')
+    ax2.set_zlim(0, 1)
 
     # OKLAB Plot
     ax3 = fig.add_subplot(132, projection='3d')
