@@ -55,7 +55,9 @@ def plot_color_spaces(rgb_colors, oklab_colors, oklch_colors, point_size=POINT_S
     ax3.set_title('OKLAB Color Space')
     ax3.set_xlabel('a')
     ax3.set_ylabel('b')
+    ax3.set_ylim(-100, 100)
     ax3.set_zlabel('L')
+    ax3.set_zlim(0, 100)
 
     # OKLCH Plot
     ax4 = fig.add_subplot(133, projection='3d')
@@ -65,6 +67,7 @@ def plot_color_spaces(rgb_colors, oklab_colors, oklch_colors, point_size=POINT_S
     ax4.set_ylabel('L')
     ax4.set_ylim(100, 0)
     ax4.set_zlabel('C')
+    ax4.set_zlim(0, 120)
 
     plt.subplots_adjust(left=0.05, right=0.95, top=0.9, bottom=0.1, wspace=0.3)
     plt.show()
