@@ -1,0 +1,9 @@
+tensorflow~=2.17.0
+numpy~=1.26.4
+pandas
+matplotlib
+seaborn
+jupyter
+scikit-learn~=1.5.2
+keras~=3.6.0
+coloria~=0.13.9
