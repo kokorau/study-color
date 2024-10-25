@@ -36,7 +36,7 @@ def process_color_palette(palette):
     oklch_colors = np.array([oklab_to_oklch(oklab) for oklab in oklab_colors])
     return rgb_colors, oklab_colors, oklch_colors
 
-# Plotting function
+# Plotting function for 4 color spaces
 def plot_color_spaces(rgb_colors, oklab_colors, oklch_colors, point_size=POINT_SIZE):
     fig = plt.figure(figsize=FIGURE_SIZE)
 
@@ -72,6 +72,36 @@ def plot_color_spaces(rgb_colors, oklab_colors, oklch_colors, point_size=POINT_S
     ax3.set_zlim(0, 120)
 
     plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.05, wspace=0.3)
+    plt.show()
+
+# Plotting function for H segments in LC plane (2D)
+def plot_oklch_segments(oklch_colors, rgb_colors, point_size=POINT_SIZE, fig_size=(24,12)):
+    # Divide H into 12 segments (0 to 2π)
+    h_segments = np.linspace(0, 2 * np.pi, 13)
+
+    fig, axes = plt.subplots(2, 6, figsize=fig_size)
+    axes = axes.flatten()
+
+    for i in range(12):
+        h_min = h_segments[i]
+        h_max = h_segments[i + 1]
+
+        # Filter colors in the current H segment
+        mask = (oklch_colors[:, 2] >= h_min) & (oklch_colors[:, 2] < h_max)
+        filtered_colors = oklch_colors[mask]
+        rgb_filtered_colors = rgb_colors[mask]
+        num_points = len(filtered_colors)
+
+        # Plot L vs C for the current H segment
+        ax = axes[i]
+        ax.scatter(filtered_colors[:, 0], filtered_colors[:, 1], c=rgb_filtered_colors, s=point_size)
+        ax.set_title(f'H: {np.degrees(h_min):.1f}° - {np.degrees(h_max):.1f}° / Points: {num_points}')
+        ax.set_xlabel('Lightness (L)')
+        ax.set_ylabel('Chroma (C)')
+        ax.set_xlim(0, 100)
+        ax.set_ylim(0, 140)
+
+    plt.tight_layout()
     plt.show()
 
 # Jupyter Notebook: Function to generate color palette with equal intervals
