@@ -1,7 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import json
+import matplotlib.animation as animation
 from skimage.color import rgb2lab, lab2lch
+from IPython.display import HTML
 
 # Constants
 POINT_SIZE = 10
@@ -69,6 +70,70 @@ def plot_color_spaces(rgb_colors, oklab_colors, oklch_colors, point_size=POINT_S
 
     plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.05, wspace=0.3)
     plt.show()
+
+# Function to add animation to sRGB color space plot
+def plot_srgb_color_space_with_animation(rgb_colors, point_size=POINT_SIZE):
+    fig = plt.figure(figsize=FIGURE_SIZE)
+    ax = fig.add_subplot(111, projection='3d')
+    ax.scatter(rgb_colors[:, 0], rgb_colors[:, 1], rgb_colors[:, 2], c=rgb_colors, s=point_size)
+    ax.set_title('sRGB Color Space')
+    ax.set_xlabel('R')
+    ax.set_xlim(0, 1)
+    ax.set_ylabel('G')
+    ax.set_ylim(1, 0)
+    ax.set_zlabel('B')
+    ax.set_zlim(0, 1)
+
+    def update(frame):
+        angle = frame
+        ax.view_init(elev=20, azim=angle)
+        return ax,
+
+    ani = animation.FuncAnimation(fig, update, frames=np.arange(0, 360, 18), interval=50, blit=False)
+    plt.close(fig)
+    return HTML(ani.to_jshtml())
+
+# Function to add animation to OKLAB color space plot
+def plot_oklab_color_space_with_animation(oklab_colors, rgb_colors, point_size=POINT_SIZE):
+    fig = plt.figure(figsize=FIGURE_SIZE)
+    ax = fig.add_subplot(111, projection='3d')
+    ax.scatter(oklab_colors[:, 1], oklab_colors[:, 2], oklab_colors[:, 0], c=rgb_colors, s=point_size)
+    ax.set_title('OKLAB Color Space')
+    ax.set_xlabel('a')
+    ax.set_ylabel('b')
+    ax.set_ylim(-100, 100)
+    ax.set_zlabel('L')
+    ax.set_zlim(0, 100)
+
+    def update(frame):
+        angle = frame
+        ax.view_init(elev=20, azim=angle)
+        return ax,
+
+    ani = animation.FuncAnimation(fig, update, frames=np.arange(0, 360, 18), interval=50, blit=False)
+    plt.close(fig)
+    return HTML(ani.to_jshtml())
+
+# Function to add animation to OKLCH color space plot
+def plot_oklch_color_space_with_animation(oklch_colors, rgb_colors, point_size=POINT_SIZE):
+    fig = plt.figure(figsize=FIGURE_SIZE)
+    ax = fig.add_subplot(111, projection='3d')
+    ax.scatter(oklch_colors[:, 2], oklch_colors[:, 0], oklch_colors[:, 1], c=rgb_colors, s=point_size)
+    ax.set_title('OKLCH Color Space')
+    ax.set_xlabel('H')
+    ax.set_ylabel('L')
+    ax.set_ylim(100, 0)
+    ax.set_zlabel('C')
+    ax.set_zlim(0, 120)
+
+    def update(frame):
+        angle = frame
+        ax.view_init(elev=20, azim=angle)
+        return ax,
+
+    ani = animation.FuncAnimation(fig, update, frames=np.arange(0, 360, 18), interval=50, blit=False)
+    plt.close(fig)
+    return HTML(ani.to_jshtml())
 
 # Plotting function for H segments in LC plane (2D)
 def plot_oklch_segments(oklch_colors, rgb_colors, point_size=POINT_SIZE, fig_size=(24,12)):
