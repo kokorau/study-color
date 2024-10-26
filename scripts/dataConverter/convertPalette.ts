@@ -27,10 +27,10 @@ const convertPaletteList = (rgbPalette: string[][]) => {
   return sortedPaletteList;
 };
 
-const rgbPalettePath = "../data/raw/rgbPalette.json";
+const rgbPalettePath = "../../data/raw/rgbPalette.json";
 const rgbPaletteList = JSON.parse(fs.readFileSync(rgbPalettePath, "utf-8"));
 
-const outputFilePath = "../data/processed/oklchPalette.json";
+const outputFilePath = "../../data/processed/oklchPalette.json";
 fs.writeFileSync(
   outputFilePath,
   JSON.stringify(convertPaletteList(rgbPaletteList), null, 2),
