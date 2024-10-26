@@ -25,11 +25,7 @@ def oklab_to_oklch(oklab):
     return lab2lch(oklab.reshape(1, 1, 3)).reshape(3)
 
 # Function to flatten color palette and convert to different color spaces
-def process_color_palette(palette):
-    # Flatten the color palette
-    flattened_palette = [color for sublist in palette for color in sublist]
-    # Convert hex to RGB
-    rgb_colors = np.array([[int(color[i:i+2], 16) / 255 for i in (1, 3, 5)] for color in flattened_palette])
+def process_color_palette(rgb_colors):
     # Convert RGB to Linear RGB and then to OKLAB
     oklab_colors = np.array([rgb_to_oklab(color) for color in rgb_colors])
     # Convert OKLAB to OKLCH
@@ -103,12 +99,3 @@ def plot_oklch_segments(oklch_colors, rgb_colors, point_size=POINT_SIZE, fig_siz
 
     plt.tight_layout()
     plt.show()
-
-# Jupyter Notebook: Function to generate color palette with equal intervals
-def generate_equal_interval_palette():
-    n_intervals = 10
-    r_values = np.linspace(0, 1, n_intervals)
-    g_values = np.linspace(0, 1, n_intervals)
-    b_values = np.linspace(0, 1, n_intervals)
-    rgb_colors = np.array([[r, g, b] for r in r_values for g in g_values for b in b_values])
-    return rgb_colors
