@@ -99,6 +99,15 @@ class Hsl:
 
         return Srgb(r + m, g + m, b + m)
 
+    def to_hex(self):
+        return self.to_srgb().to_hex()
+
+    def to_oklab(self):
+        return self.to_srgb().to_oklab()
+
+    def to_oklch(self):
+        return self.to_srgb().to_oklch()
+
 class Oklch:
     def __init__(self, L: float, C: float, H: float):
         self.L = L
