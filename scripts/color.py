@@ -7,7 +7,7 @@ class Hex:
     def to_srgb(self):
         hex_value = self.hex_value.lstrip('#')
         r, g, b = tuple(int(hex_value[i:i + 2], 16) / 255 for i in (0, 2, 4))
-        return sRGB(r, g, b)
+        return Srgb(r, g, b)
 
     def to_oklab(self):
         return self.to_srgb().to_oklab()
@@ -18,7 +18,7 @@ class Hex:
     def to_hsl(self):
         return self.to_srgb().to_hsl()
 
-class sRGB:
+class Srgb:
     def __init__(self, r: float, g: float, b: float):
         self.r = r
         self.g = g
@@ -49,7 +49,7 @@ class sRGB:
 
             h *= 60
 
-        return HSL(h, s, l)
+        return Hsl(h, s, l)
 
     def to_oklab(self):
         rgb = np.array([self.r, self.g, self.b])
@@ -67,12 +67,12 @@ class sRGB:
             [0.0259040371, 0.7827717662, -0.8086757660]
         ]).dot(lms_)
 
-        return OKLab(*oklab)
+        return Oklab(*oklab)
 
     def to_oklch(self):
         return self.to_oklab().to_oklch()
 
-class HSL:
+class Hsl:
     def __init__(self, h: float, s: float, l: float):
         self.h = h
         self.s = s
@@ -97,9 +97,9 @@ class HSL:
         else:
             r, g, b = c_val, 0, x
 
-        return sRGB(r + m, g + m, b + m)
+        return Srgb(r + m, g + m, b + m)
 
-class OKLCH:
+class Oklch:
     def __init__(self, L: float, C: float, H: float):
         self.L = L
         self.C = C
@@ -110,7 +110,7 @@ class OKLCH:
         L = self.L
         a = self.C * np.cos(np.radians(self.H))
         b = self.C * np.sin(np.radians(self.H))
-        return OKLab(L, a, b)
+        return Oklab(L, a, b)
 
     def to_srgb(self):
         """OKLCHからsRGBに変換するメソッド"""
@@ -124,7 +124,7 @@ class OKLCH:
         """OKLCHからHSLに変換するメソッド"""
         return self.to_srgb().to_hsl()
 
-class OKLab:
+class Oklab:
     def __init__(self, L: float, a: float, b: float):
         self.L = L
         self.a = a
@@ -136,7 +136,7 @@ class OKLab:
         H = np.degrees(np.arctan2(self.b, self.a))
         if H < 0:
             H += 360
-        return OKLCH(L, C, H)
+        return Oklch(L, C, H)
 
     def to_srgb(self):
         oklab = np.array([self.L, self.a, self.b])
@@ -154,7 +154,7 @@ class OKLab:
             [-0.0041960863, -0.7034186147, 1.7076147010]
         ]).dot(lms)
 
-        return sRGB(*rgb)
+        return Srgb(*rgb)
 
     def to_hex(self):
         return self.to_srgb().to_hex()

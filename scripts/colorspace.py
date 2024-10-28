@@ -1,5 +1,6 @@
-import convertColor
+import color
 import numpy as np
+import matplotlib.pyplot as plt
 
 def plot_oklab_color_space():
     """
@@ -19,7 +20,7 @@ def plot_oklab_color_space():
     b_flat = b.flatten()
 
     # sRGBからOKLab色空間に変換
-    oklab_colors = [convertColor.srgb_to_oklab(convertColor.sRGB(r, g, b)) for r, g, b in zip(r_flat, g_flat, b_flat)]
+    oklab_colors = [color.Srgb(r, g, b).to_oklab() for r, g, b in zip(r_flat, g_flat, b_flat)]
     L_flat = [c.L for c in oklab_colors]
     a_flat = [c.a for c in oklab_colors]
     b_flat = [c.b for c in oklab_colors]
