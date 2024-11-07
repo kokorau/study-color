@@ -7,3 +7,5 @@ jupyter
 scikit-learn~=1.5.2
 keras~=3.6.0
 coloria~=0.13.9
+selenium
+playwright
